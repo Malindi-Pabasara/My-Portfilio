@@ -93,7 +93,7 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
             <a href="#projects" className="btn btn-primary">Explore projects</a>
             {cvUrl && cvUrl !== '#' && (
               <a 
-                href={cvUrl}
+                href={cvUrl.includes('/upload/') ? cvUrl.replace('/upload/', '/upload/fl_inline/') : cvUrl}
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="btn btn-ghost"
