@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary, UploadApiOptions } from 'cloudinary';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,28 +8,39 @@ cloudinary.config({
 
 /**
  * Uploads a file buffer to Cloudinary and returns the secure URL.
- * @param buffer  - Raw file bytes
- * @param folder  - Cloudinary folder to organise uploads (e.g. 'portfolio/cv')
- * @param options - Extra Cloudinary upload options
+ *
+ * @param buffer       - Raw file bytes
+ * @param folder       - Cloudinary folder to organise uploads (e.g. 'portfolio/cv')
+ * @param options      - Extra Cloudinary upload options (e.g. resource_type)
+ *
+ * Supported resource_type values:
+ *   'image' - JPG, PNG, GIF, WebP, SVG, etc.
+ *   'video' - MP4, MOV, etc.
+ *   'raw'   - PDF, ZIP, DOC, DOCX, XLSX, CSV, TXT, and all other binary files
+ *   'auto'  - Cloudinary auto-detects (may fail for non-image types on some plans)
+ *
+ * Always pass resource_type explicitly to avoid "invalid file type" errors.
  */
 export async function uploadToCloudinary(
   buffer: Buffer,
   folder: string,
-  options: Record<string, unknown> = {}
+  options: UploadApiOptions = {}
 ): Promise<string> {
+  // Default to 'auto' only when the caller has not specified a resource_type
+  const uploadOptions: UploadApiOptions = {
+    folder,
+    resource_type: 'auto',
+    ...options, // caller-supplied resource_type overrides the default above
+  };
+
   return new Promise((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream(
-        {
-          folder,
-          resource_type: 'auto', // handles images, PDFs, etc.
-          ...options,
-        },
-        (error, result) => {
-          if (error || !result) return reject(error ?? new Error('Cloudinary upload failed'));
-          resolve(result.secure_url);
+      .upload_stream(uploadOptions, (error, result) => {
+        if (error || !result) {
+          return reject(error ?? new Error('Cloudinary upload failed'));
         }
-      )
+        resolve(result.secure_url);
+      })
       .end(buffer);
   });
 }
