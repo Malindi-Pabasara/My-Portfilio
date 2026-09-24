@@ -17,8 +17,6 @@ const STAR_LABELS = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 export default function ProjectFeedback({ projects }: ProjectFeedbackProps) {
   const { data: session, status } = useSession();
 
-  // Completely hide the section for unauthenticated users
-  if (status !== 'authenticated' || !session) return null;
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [rating, setRating] = useState(0);
@@ -27,6 +25,9 @@ export default function ProjectFeedback({ projects }: ProjectFeedbackProps) {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+
+  // Completely hide the section for unauthenticated users
+  if (status !== 'authenticated' || !session) return null;
 
   const handleProjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const opt = e.target.selectedOptions[0];
