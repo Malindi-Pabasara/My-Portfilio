@@ -50,12 +50,20 @@ export default function AdminProjects() {
     setUploadMsg('');
     try {
       const url = await uploadFile(file, 'portfolio/projects');
+      if (editing.imageUrl) {
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: editing.imageUrl }),
+        }).catch(() => {});
+      }
       setEditing({ ...editing, imageUrl: url });
       setUploadMsg('✓ Image uploaded!');
     } catch (err: any) {
       setUploadMsg(`✗ ${err.message}`);
     } finally {
       setImgUploading(false);
+      e.target.value = '';
     }
   };
 

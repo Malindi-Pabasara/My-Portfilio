@@ -236,8 +236,22 @@ export default function AdminProfile() {
     setMsg(null);
     try {
       const url = await uploadFile(file, 'portfolio/avatars');
+      if (form.avatarUrl) {
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: form.avatarUrl }),
+        }).catch(() => {});
+      }
+      const payload = { ...form, avatarUrl: url };
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to update profile database');
       set('avatarUrl', url);
-      setMsg({ text: '✓ Profile picture uploaded successfully!', ok: true });
+      setMsg({ text: '✓ Profile picture uploaded and saved!', ok: true });
     } catch (err: any) {
       setMsg({ text: `✗ Avatar upload failed: ${err.message}`, ok: false });
     } finally {
@@ -246,10 +260,31 @@ export default function AdminProfile() {
     }
   };
 
-  const handleAvatarDelete = () => {
-    if (!confirm('Remove the profile picture? The change is saved when you click "Save Profile".')) return;
-    set('avatarUrl', '');
-    setMsg({ text: '⚠ Profile picture removed. Click "Save Profile" to apply.', ok: true });
+  const handleAvatarDelete = async () => {
+    if (!confirm('Are you sure you want to delete your profile picture? This cannot be undone.')) return;
+    setAvatarUploading(true);
+    try {
+      if (form.avatarUrl) {
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: form.avatarUrl }),
+        });
+      }
+      const payload = { ...form, avatarUrl: '' };
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to update profile');
+      set('avatarUrl', '');
+      setMsg({ text: '✓ Profile picture deleted completely.', ok: true });
+    } catch (err: any) {
+      setMsg({ text: `✗ Failed to delete picture: ${err.message}`, ok: false });
+    } finally {
+      setAvatarUploading(false);
+    }
   };
 
   /* ── CV handlers ── */
@@ -260,8 +295,22 @@ export default function AdminProfile() {
     setMsg(null);
     try {
       const url = await uploadFile(file, 'portfolio/cv');
+      if (form.cvUrl) {
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: form.cvUrl }),
+        }).catch(() => {});
+      }
+      const payload = { ...form, cvUrl: url };
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to update profile database');
       set('cvUrl', url);
-      setMsg({ text: '✓ CV uploaded to Cloudinary!', ok: true });
+      setMsg({ text: '✓ CV uploaded and saved!', ok: true });
     } catch (err: any) {
       setMsg({ text: `✗ CV upload failed: ${err.message}`, ok: false });
     } finally {
