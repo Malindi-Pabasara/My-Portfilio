@@ -270,10 +270,34 @@ export default function AdminProfile() {
     }
   };
 
-  const handleCvDelete = () => {
-    if (!confirm('Remove the CV? The change is saved when you click "Save Profile".')) return;
-    set('cvUrl', '');
-    setMsg({ text: '⚠ CV removed. Click "Save Profile" to apply.', ok: true });
+  const handleCvDelete = async () => {
+    if (!confirm('Are you sure you want to completely delete your CV? This cannot be undone.')) return;
+    setCvUploading(true);
+    setMsg(null);
+    try {
+      if (form.cvUrl) {
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: form.cvUrl }),
+        });
+      }
+      
+      const payload = { ...form, cvUrl: '' };
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to update profile');
+      
+      set('cvUrl', '');
+      setMsg({ text: '✓ CV deleted completely.', ok: true });
+    } catch (err: any) {
+      setMsg({ text: `✗ Failed to delete CV: ${err.message}`, ok: false });
+    } finally {
+      setCvUploading(false);
+    }
   };
 
   /* ── form submit ── */

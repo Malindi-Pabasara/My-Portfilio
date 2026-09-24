@@ -45,4 +45,13 @@ export async function uploadToCloudinary(
   });
 }
 
+export async function deleteFromCloudinary(publicId: string, resourceType: 'image' | 'video' | 'raw' = 'image'): Promise<void> {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(publicId, { resource_type: resourceType }, (error, result) => {
+      if (error) return reject(error);
+      resolve(result);
+    });
+  });
+}
+
 export default cloudinary;
