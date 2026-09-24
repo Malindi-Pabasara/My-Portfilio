@@ -142,7 +142,7 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
             <div className="absolute w-3 h-3 rounded-full bg-[#41c7ff] shadow-[0_0_12px_#41c7ff] bottom-[15%] left-[10%] z-20"></div>
 
             {/* Background Glow */}
-            <div className="absolute inset-[-60px] rounded-full bg-gradient-to-r from-[#9d6bff]/20 to-[#41c7ff]/20 blur-[70px] -z-10 pointer-events-none"></div>
+            <div className="absolute inset-[-60px] rounded-full bg-gradient-to-r from-[#9d6bff]/30 to-[#41c7ff]/20 blur-[70px] -z-10 pointer-events-none"></div>
           </div>
         </div>
       </div>

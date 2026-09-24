@@ -39,7 +39,7 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(157, 107, 255, .04) 1px, transparent 1px),
+    linear-gradient(rgba(157, 107, 255, .08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(65, 199, 255, .04) 1px, transparent 1px);
   background-size: 46px 46px;
   mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, #000 60%, transparent 100%);
@@ -101,7 +101,7 @@ a { color: inherit; }
   pointer-events: none;
   opacity: .35;
 }
-.glow-1 { width: 520px; height: 520px; background: var(--purple); top: -180px; left: -140px; }
+.glow-1 { width: 520px; height: 520px; background: var(--purple); top: -180px; left: -140px; opacity: .45; }
 .glow-2 { width: 520px; height: 520px; background: var(--blue); top: 220px; right: -140px; }
 .glow-3 { width: 420px; height: 420px; background: linear-gradient(135deg, var(--purple-deep), var(--blue)); bottom: -160px; left: 30%; opacity: .2; }
 
@@ -210,7 +210,7 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 /* Cursor glow */
 .cursor-glow {
   position: absolute; width: 360px; height: 360px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(157,107,255,.14), transparent 70%);
+  background: radial-gradient(circle, rgba(157,107,255,.24), transparent 70%);
   pointer-events: none; transform: translate(-50%,-50%); opacity: 0; transition: opacity .3s; z-index: 0;
 }
 .hero:hover .cursor-glow { opacity: 1; }
