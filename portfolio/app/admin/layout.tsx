@@ -74,14 +74,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside
         className="admin-sidebar"
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          height: '100vh',
-          zIndex: 40,
           transform: sidebarOpen ? 'translateX(0)' : undefined,
         }}
-        // On desktop sidebar is always visible via CSS; on mobile it slides in
       >
         {/* Desktop brand header */}
         <div className="brand hidden md:flex" style={{ padding: '0 20px 24px', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
