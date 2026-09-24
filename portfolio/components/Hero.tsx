@@ -98,35 +98,36 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
           </div>
         </div>
         
-        {/* Right Column */}
-        <div className="flex justify-center lg:justify-center fade-in d3 relative w-full mt-12 lg:mt-0">
-          <div className="relative w-[360px] h-[360px] flex items-center justify-center translate-x-[50px]">
-            
+        {/* Right Column — avatar */}
+        <div className="flex justify-center fade-in d3 relative w-full mt-8 lg:mt-0">
+          <div className="relative flex items-center justify-center"
+               style={{ width: 'min(320px, 80vw)', height: 'min(320px, 80vw)' }}>
+
             {/* Outer Rotating Glowing Ring */}
-            <div 
+            <div
               className="absolute inset-0 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-[#41c7ff] to-purple-500 animate-[spin_10s_linear_infinite] shadow-[0_0_30px_rgba(168,85,247,0.4)] z-0"
               style={{ WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}
-            ></div>
-            
-            {/* Secondary Dashed Ring */}
-            <div className="absolute inset-[-16px] rounded-full border border-dashed border-purple-500/40 animate-[spin_15s_linear_infinite_reverse] z-0"></div>
+            />
 
-            {/* Static Inner Avatar */}
-            <div className="relative w-[320px] h-[320px] rounded-full border-4 border-[#242b52] bg-gradient-to-br from-[#1c2444] to-[#0c1020] flex items-center justify-center shadow-[inset_0_0_70px_rgba(157,107,255,0.18)] z-10 overflow-hidden">
+            {/* Secondary Dashed Ring */}
+            <div className="absolute inset-[-12px] rounded-full border border-dashed border-purple-500/40 animate-[spin_15s_linear_infinite_reverse] z-0" />
+
+            {/* Avatar Core */}
+            <div className="relative w-full h-full rounded-full border-4 border-[#242b52] bg-gradient-to-br from-[#1c2444] to-[#0c1020] flex items-center justify-center shadow-[inset_0_0_70px_rgba(157,107,255,0.18)] z-10 overflow-hidden">
               {avatarUrl ? (
-                <Image src={avatarUrl} alt={name} fill style={{ objectFit: 'cover' }} sizes="320px" priority />
+                <Image src={avatarUrl} alt={name} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 80vw, 320px" priority />
               ) : (
-                <span className="font-['Space_Grotesk'] font-bold text-[6rem] text-[#eef0fb]/30 tracking-tighter">
+                <span className="font-['Space_Grotesk'] font-bold text-[#eef0fb]/30 tracking-tighter"
+                      style={{ fontSize: 'clamp(3rem, 12vw, 5.5rem)' }}>
                   {name ? name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'MP'}
                 </span>
               )}
-              {/* Note: Moved dots outside the overflow-hidden container to prevent clipping */}
             </div>
-            <div className="absolute w-3 h-3 rounded-full bg-[#9d6bff] shadow-[0_0_12px_#9d6bff] top-[12%] right-[15%] z-20"></div>
-            <div className="absolute w-3 h-3 rounded-full bg-[#41c7ff] shadow-[0_0_12px_#41c7ff] bottom-[15%] left-[10%] z-20"></div>
+            <div className="absolute w-3 h-3 rounded-full bg-[#9d6bff] shadow-[0_0_12px_#9d6bff] top-[12%] right-[15%] z-20" />
+            <div className="absolute w-3 h-3 rounded-full bg-[#41c7ff] shadow-[0_0_12px_#41c7ff] bottom-[15%] left-[10%] z-20" />
 
             {/* Background Glow */}
-            <div className="absolute inset-[-60px] rounded-full bg-gradient-to-r from-[#9d6bff]/30 to-[#41c7ff]/20 blur-[70px] -z-10 pointer-events-none"></div>
+            <div className="absolute inset-[-40px] rounded-full bg-gradient-to-r from-[#9d6bff]/30 to-[#41c7ff]/20 blur-[60px] -z-10 pointer-events-none" />
           </div>
         </div>
       </div>
