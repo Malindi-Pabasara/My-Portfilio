@@ -29,10 +29,10 @@ const StatSchema = new Schema<IStat>({
 
 const ProfileSchema = new Schema<IProfile>(
   {
-    name: { type: String, required: true },
-    title: { type: String, required: true },
-    tagline: { type: String, required: true },
-    bio: { type: String, required: true },
+    name: { type: String, default: '' },
+    title: { type: String, default: '' },
+    tagline: { type: String, default: '' },
+    bio: { type: String, default: '' },
     available: { type: Boolean, default: true },
     stats: { type: [StatSchema], default: [] },
     email: { type: String, default: '' },

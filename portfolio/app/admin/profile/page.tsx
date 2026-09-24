@@ -194,7 +194,7 @@ export default function AdminProfile() {
 
   useEffect(() => {
     fetch('/api/profile').then(r => r.json()).then((d) => {
-      if (!d || !d.name) return; // empty / not yet seeded
+      if (!d || Object.keys(d).length === 0) return; // empty / not yet seeded
       // Only copy known schema fields — never let _id / __v into form state
       setForm({
         name:      d.name       ?? '',
