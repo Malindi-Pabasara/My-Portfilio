@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 
 interface Project {
   _id: string;
@@ -16,7 +15,10 @@ interface ProjectFeedbackProps {
 const STAR_LABELS = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 
 export default function ProjectFeedback({ projects }: ProjectFeedbackProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  // Completely hide the section for unauthenticated users
+  if (status !== 'authenticated' || !session) return null;
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [rating, setRating] = useState(0);
@@ -73,27 +75,7 @@ export default function ProjectFeedback({ projects }: ProjectFeedbackProps) {
           Have you explored one of my projects? I'd love to hear your thoughts. Your feedback helps me grow.
         </p>
 
-        {!session ? (
-          // Not logged in — prompt to login
-          <div style={{
-            background: 'var(--panel-2)',
-            border: '1px solid var(--border)',
-            borderRadius: 16,
-            padding: '40px 32px',
-            maxWidth: 480,
-            textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>🔒</div>
-            <h3 style={{ margin: '0 0 8px', fontSize: '1.15rem' }}>Login Required</h3>
-            <p style={{ color: 'var(--muted)', fontSize: '.9rem', marginBottom: 24 }}>
-              Please sign in to submit project feedback.
-            </p>
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <Link href="/login" className="btn btn-primary" style={{ fontSize: '.9rem' }}>Sign In</Link>
-              <Link href="/register" className="btn btn-ghost" style={{ fontSize: '.9rem' }}>Register</Link>
-            </div>
-          </div>
-        ) : submitted ? (
+        {submitted ? (
           // Success state
           <div style={{
             background: 'linear-gradient(135deg, rgba(74,222,128,0.06), rgba(74,222,128,0.02))',
