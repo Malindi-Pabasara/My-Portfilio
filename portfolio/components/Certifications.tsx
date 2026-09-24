@@ -20,8 +20,8 @@ export default function Certifications({ items }: { items: Cert[] }) {
               <div className="cert-card">
                 <StarIcon />
                 <div>
-                  <h3>{cert.title}</h3>
-                  <span>{cert.issuer} · {cert.year}</span>
+                  <h3>{cert?.title || 'Unknown Title'}</h3>
+                  <span>{cert?.issuer || 'Unknown Issuer'} · {cert?.year || 'Unknown Year'}</span>
                 </div>
               </div>
             </RevealWrapper>

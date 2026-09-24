@@ -13,9 +13,9 @@ export default function Education({ items }: { items: EduItem[] }) {
             <RevealWrapper key={edu._id}>
               <div className={`tl-item${!edu.active ? ' muted' : ''}`}>
                 <div className="tl-dot" />
-                <h3>{edu.degree}</h3>
-                <div className="period">{edu.institution} · {edu.period}</div>
-                {edu.details && <p>{edu.details}</p>}
+                <h3>{edu?.degree || 'Unknown Degree'}</h3>
+                <div className="period">{edu?.institution || 'Unknown Institution'} · {edu?.period || 'Unknown Period'}</div>
+                {edu?.details && <p>{edu.details}</p>}
               </div>
             </RevealWrapper>
           ))}

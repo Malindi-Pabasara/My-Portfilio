@@ -25,12 +25,12 @@ export default function Experience({ items }: { items: ExperienceItem[] }) {
                   </svg>
                 </div>
                 <div>
-                  <h3>{item.title}</h3>
+                  <h3>{item?.title || 'Unknown Title'}</h3>
                   <div className="exp-role">
-                    {item.company}{item.period ? ` · ${item.period}` : ''}
+                    {item?.company || 'Unknown Company'}{item?.period ? ` · ${item.period}` : ''}
                   </div>
                   <ul className="exp-list">
-                    {item.bullets.map((b, i) => (
+                    {(item?.bullets || []).map((b, i) => (
                       <li key={i}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M20 6L9 17l-5-5" />

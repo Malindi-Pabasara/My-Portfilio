@@ -24,7 +24,7 @@ export default function Skills({ items }: { items: SkillItem[] }) {
                 <div className="icon">{ICONS[idx % ICONS.length]}</div>
                 <h3>{skill.category}</h3>
                 <div className="chips">
-                  {skill.items.map((chip) => (
+                  {(skill.items || []).map((chip) => (
                     <span className="chip" key={chip}>{chip}</span>
                   ))}
                 </div>

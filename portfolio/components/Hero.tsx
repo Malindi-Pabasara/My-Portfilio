@@ -96,12 +96,12 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl }: He
             )}
           </div>
           <div className="flex gap-8 flex-wrap fade-in d4">
-            {stats.map((s, i) => (
+            {(stats || []).map((s, i) => (
               <div key={i} className="flex flex-col">
                 <b className="font-['Space_Grotesk'] text-2xl font-bold bg-gradient-to-r from-[#9d6bff] to-[#41c7ff] text-transparent bg-clip-text">
-                  <span data-count={s.value} data-suffix={s.suffix || ''}>0</span>
+                  <span data-count={s?.value || 0} data-suffix={s?.suffix || ''}>0</span>
                 </b>
-                <span className="text-sm text-[#5a6291]">{s.label}</span>
+                <span className="text-sm text-[#5a6291]">{s?.label || ''}</span>
               </div>
             ))}
           </div>
