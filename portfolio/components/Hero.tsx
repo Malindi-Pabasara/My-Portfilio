@@ -139,11 +139,10 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
         </div>
 
         {/* ── Right / Photo Column ── */}
-        <div className="flex justify-center fade-in d3 relative w-full">
+        <div className="flex justify-center lg:justify-end fade-in d3 relative w-full lg:-mr-4 xl:-mr-8">
           {/* orbit-container — provides clientWidth for the JS dot radius calc */}
           <div
-            className="orbit-container relative flex items-center justify-center"
-            style={{ width: 'min(300px, 78vw)', height: 'min(300px, 78vw)' }}
+            className="orbit-container relative flex items-center justify-center w-[min(300px,78vw)] h-[min(300px,78vw)] lg:w-[345px] lg:h-[345px]"
           >
             {/* Outer Rotating Glowing Ring */}
             <div
@@ -164,7 +163,7 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
             {/* Avatar Core */}
             <div className="relative w-full h-full rounded-full border-4 border-[#242b52] bg-gradient-to-br from-[#1c2444] to-[#0c1020] flex items-center justify-center shadow-[inset_0_0_70px_rgba(157,107,255,0.18)] z-10 overflow-hidden">
               {avatarUrl ? (
-                <Image src={avatarUrl} alt={name} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 78vw, 300px" priority />
+                <Image src={avatarUrl} alt={name} fill style={{ objectFit: 'cover' }} sizes="(max-width: 1024px) 78vw, 345px" priority />
               ) : (
                 <span
                   className="font-['Space_Grotesk'] font-bold text-[#eef0fb]/30 tracking-tighter"
