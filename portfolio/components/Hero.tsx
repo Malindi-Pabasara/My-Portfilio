@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import TypewriterEffect from './TypewriterEffect';
 
 interface Stat { label: string; value: number; suffix: string; }
@@ -124,7 +125,7 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
             {/* Static Inner Avatar */}
             <div className="relative w-[320px] h-[320px] rounded-full border-4 border-[#242b52] bg-gradient-to-br from-[#1c2444] to-[#0c1020] flex items-center justify-center shadow-[inset_0_0_70px_rgba(157,107,255,0.18)] z-10 overflow-hidden">
               {avatarUrl ? (
-                <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+                <Image src={avatarUrl} alt={name} fill style={{ objectFit: 'cover' }} sizes="320px" priority />
               ) : (
                 <span className="font-['Space_Grotesk'] font-bold text-[6rem] text-[#eef0fb]/30 tracking-tighter">
                   {name ? name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'MP'}
