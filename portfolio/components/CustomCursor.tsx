@@ -87,8 +87,17 @@ export default function CustomCursor() {
       {/* Outer Ring */}
       <div
         ref={ringRef}
-        className="fixed top-0 left-0 w-8 h-8 border border-[#9d6bff] rounded-full pointer-events-none z-[9999] transition-transform duration-150 ease-out mix-blend-screen"
+        className="transition-transform duration-150 ease-out mix-blend-screen"
         style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '32px',
+          height: '32px',
+          border: '1px solid #9d6bff',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 9999,
           marginLeft: '-16px',
           marginTop: '-16px',
           opacity: isVisible ? (isHovering ? 0.8 : 0.4) : 0,
@@ -98,8 +107,17 @@ export default function CustomCursor() {
       {/* Inner Dot */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-[#9d6bff] rounded-full pointer-events-none z-[10000] mix-blend-screen"
+        className="mix-blend-screen"
         style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '8px',
+          height: '8px',
+          backgroundColor: '#9d6bff',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 10000,
           marginLeft: '-4px',
           marginTop: '-4px',
           opacity: isVisible ? 1 : 0,
