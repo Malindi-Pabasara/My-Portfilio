@@ -194,7 +194,22 @@ export default function AdminProfile() {
 
   useEffect(() => {
     fetch('/api/profile').then(r => r.json()).then((d) => {
-      if (d && d.name) setForm(d);
+      if (!d || !d.name) return; // empty / not yet seeded
+      // Only copy known schema fields — never let _id / __v into form state
+      setForm({
+        name:      d.name       ?? '',
+        title:     d.title      ?? '',
+        tagline:   d.tagline    ?? '',
+        bio:       d.bio        ?? '',
+        available: d.available  ?? true,
+        stats:     Array.isArray(d.stats) ? d.stats : DEFAULT.stats,
+        email:     d.email      ?? '',
+        phone:     d.phone      ?? '',
+        linkedin:  d.linkedin   ?? '',
+        github:    d.github     ?? '',
+        cvUrl:     d.cvUrl      ?? '',
+        avatarUrl: d.avatarUrl  ?? '',
+      });
     });
   }, []);
 
@@ -260,15 +275,40 @@ export default function AdminProfile() {
     e.preventDefault();
     setSaving(true);
     setMsg(null);
+
+    // Build a clean payload containing only the known schema fields.
+    // This prevents _id / __v / timestamps (which are set by setForm(d) on load)
+    // from reaching the API and causing "Mod on _id not allowed" errors.
+    const payload: ProfileData = {
+      name:       form.name,
+      title:      form.title,
+      tagline:    form.tagline,
+      bio:        form.bio,
+      available:  form.available,
+      stats:      form.stats.map(s => ({ label: s.label, value: Number(s.value), suffix: s.suffix ?? '' })),
+      email:      form.email,
+      phone:      form.phone,
+      linkedin:   form.linkedin,
+      github:     form.github,
+      cvUrl:      form.cvUrl,
+      avatarUrl:  form.avatarUrl,
+    };
+
     const res = await fetch('/api/profile', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     });
+
     setSaving(false);
-    setMsg(res.ok
-      ? { text: '✓ Profile saved successfully!', ok: true }
-      : { text: '✗ Failed to save profile.', ok: false });
+
+    if (res.ok) {
+      setMsg({ text: '✓ Profile saved successfully!', ok: true });
+    } else {
+      const errData = await res.json().catch(() => ({}));
+      const detail = errData.error ?? errData.detail ?? 'Unknown error';
+      setMsg({ text: `✗ Failed to save profile: ${detail}`, ok: false });
+    }
   };
 
   const busy = saving || avatarUploading || cvUploading;
