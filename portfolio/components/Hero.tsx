@@ -92,14 +92,25 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
           <div className="flex flex-wrap gap-4 mb-10 fade-in d3">
             <a href="#projects" className="btn btn-primary">Explore projects</a>
             {cvUrl && cvUrl !== '#' && (
-              <a 
-                href={`https://docs.google.com/viewer?url=${encodeURIComponent(cvUrl)}&embedded=true`}
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="btn btn-ghost"
-              >
-                Download CV
-              </a>
+              <>
+                <a 
+                  href={`https://docs.google.com/viewer?url=${encodeURIComponent(cvUrl)}&embedded=true`}
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn btn-ghost"
+                >
+                  Preview CV
+                </a>
+                <a 
+                  href={cvUrl.includes('/upload/') ? cvUrl.replace('/upload/', '/upload/fl_attachment/') : cvUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn btn-ghost"
+                  download
+                >
+                  Download CV
+                </a>
+              </>
             )}
           </div>
           <div className="flex gap-8 flex-wrap fade-in d4">
