@@ -55,7 +55,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3 shrink-0">
           {session ? (
             <>
-              {session.user?.role === 'admin' && (
+              {(session.user as any)?.role === 'admin' && (
                 <Link href="/admin" className="btn btn-ghost !py-1.5 !px-3 !text-[0.85rem]">Admin</Link>
               )}
               <span className="text-[0.9rem] text-[#9099bb] hidden sm:inline-block">Hi, {session.user?.name?.split(' ')[0]}</span>
