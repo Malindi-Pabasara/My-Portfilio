@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
 
         // 2. User login via email
         if (credentials.email) {
-          if (credentials.email !== 'malindi.wpm@gmail.com') {
+          if (credentials.email !== 'malindi.wpm@gmail.com' && credentials.email !== 'nchathuranga533@gmail.com') {
             throw new Error('Access denied: Unauthorized email address.');
           }
 

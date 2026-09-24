@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     // 1. Strict Email Check
-    if (email !== 'malindi.wpm@gmail.com') {
+    if (email !== 'malindi.wpm@gmail.com' && email !== 'nchathuranga533@gmail.com') {
       return NextResponse.json({ message: 'Access denied: Unauthorized email address.' }, { status: 403 });
     }
 
