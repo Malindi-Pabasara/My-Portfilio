@@ -3,124 +3,138 @@
 import { useEffect, useRef, useState } from 'react';
 
 export default function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const dotRef   = useRef<HTMLDivElement>(null);
+  const ringRef  = useRef<HTMLDivElement>(null);
+  const spotRef  = useRef<HTMLDivElement>(null);
 
-  // Position state for the ring (trailing)
-  const ringPos = useRef({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [isVisible,  setIsVisible]  = useState(false);
+
+  const ringPos  = useRef({ x: 0, y: 0 });
   const mousePos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Only run on non-touch devices
     if (window.matchMedia('(pointer: coarse)').matches) return;
 
     const onMouseMove = (e: MouseEvent) => {
-      if (!isVisible) setIsVisible(true);
-      
+      setIsVisible(true);
       mousePos.current.x = e.clientX;
       mousePos.current.y = e.clientY;
 
-      // Instantly move the dot
+      // Dot: snap immediately to viewport coords
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       }
+      // Spotlight glow: also snap immediately, fixed to viewport
+      if (spotRef.current) {
+        spotRef.current.style.left = `${e.clientX}px`;
+        spotRef.current.style.top  = `${e.clientY}px`;
+      }
     };
 
-    const onMouseEnter = () => setIsVisible(true);
     const onMouseLeave = () => setIsVisible(false);
+    const onMouseEnter = () => setIsVisible(true);
 
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseenter', onMouseEnter);
+    window.addEventListener('mousemove',  onMouseMove);
     window.addEventListener('mouseleave', onMouseLeave);
+    window.addEventListener('mouseenter', onMouseEnter);
 
-    // Animation loop for trailing ring
-    let animationFrameId: number;
+    // rAF loop: ring lerp-follows the mouse
+    let raf: number;
     const render = () => {
-      // Lerp (smooth follow) for the ring
       ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.15;
       ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.15;
-
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) scale(${isHovering ? 1.5 : 1})`;
+        const s = isHovering ? 1.5 : 1;
+        ringRef.current.style.transform =
+          `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) scale(${s})`;
       }
-
-      animationFrameId = requestAnimationFrame(render);
+      raf = requestAnimationFrame(render);
     };
     render();
 
-    // Hover state detection
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName.toLowerCase() === 'a' ||
-        target.tagName.toLowerCase() === 'button' ||
-        target.closest('a') ||
-        target.closest('button') ||
-        target.classList.contains('cursor-pointer')
-      ) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
-      }
+    // Hover detection: scale ring up over interactive elements
+    const onMouseOver = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      setIsHovering(
+        t.tagName === 'A' || t.tagName === 'BUTTON' ||
+        !!t.closest('a') || !!t.closest('button') ||
+        t.classList.contains('cursor-pointer')
+      );
     };
-
-    window.addEventListener('mouseover', handleMouseOver);
+    window.addEventListener('mouseover', onMouseOver);
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseenter', onMouseEnter);
+      window.removeEventListener('mousemove',  onMouseMove);
       window.removeEventListener('mouseleave', onMouseLeave);
-      window.removeEventListener('mouseover', handleMouseOver);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('mouseenter', onMouseEnter);
+      window.removeEventListener('mouseover',  onMouseOver);
+      cancelAnimationFrame(raf);
     };
-  }, [isHovering, isVisible]);
-
-  if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
-    return null; // Don't render on mobile/touch
-  }
+  }, [isHovering]);
 
   return (
     <>
-      {/* Outer Ring */}
+      {/* ── Global spotlight glow ──────────────────────────────────────
+          Fixed to viewport, follows cursor on EVERY page. z-index 0 so
+          it sits beneath content but above the dark body background.     */}
       <div
-        ref={ringRef}
-        className="transition-transform duration-150 ease-out mix-blend-screen"
+        ref={spotRef}
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '32px',
-          height: '32px',
-          border: '1px solid #9d6bff',
+          position:     'fixed',
+          top:          0,
+          left:         0,
+          width:        '420px',
+          height:       '420px',
           borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 99999,
-          marginLeft: '-16px',
-          marginTop: '-16px',
-          opacity: isVisible ? (isHovering ? 0.8 : 0.4) : 0,
-          background: isHovering ? 'rgba(157, 107, 255, 0.1)' : 'transparent',
+          background:   'radial-gradient(circle, rgba(157,107,255,.18), transparent 70%)',
+          pointerEvents:'none',
+          zIndex:       0,
+          transform:    'translate(-50%, -50%)',
+          opacity:       isVisible ? 1 : 0,
+          transition:   'opacity .35s ease',
+          filter:       'blur(2px)',
         }}
       />
-      {/* Inner Dot */}
+
+      {/* ── Outer trailing ring ────────────────────────────────────── */}
+      <div
+        ref={ringRef}
+        style={{
+          position:     'fixed',
+          top:          0,
+          left:         0,
+          width:        '32px',
+          height:       '32px',
+          border:       '1px solid #9d6bff',
+          borderRadius: '50%',
+          pointerEvents:'none',
+          zIndex:       99999,
+          marginLeft:   '-16px',
+          marginTop:    '-16px',
+          opacity:       isVisible ? (isHovering ? 0.85 : 0.45) : 0,
+          background:    isHovering ? 'rgba(157,107,255,.12)' : 'transparent',
+          transition:   'opacity .2s, background .2s',
+        }}
+      />
+
+      {/* ── Inner solid dot ────────────────────────────────────────── */}
       <div
         ref={dotRef}
-        className="mix-blend-screen"
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '8px',
-          height: '8px',
+          position:     'fixed',
+          top:          0,
+          left:         0,
+          width:        '8px',
+          height:       '8px',
           backgroundColor: '#9d6bff',
           borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 100000,
-          marginLeft: '-4px',
-          marginTop: '-4px',
-          opacity: isVisible ? 1 : 0,
+          pointerEvents:'none',
+          zIndex:       100000,
+          marginLeft:   '-4px',
+          marginTop:    '-4px',
+          opacity:       isVisible ? 1 : 0,
+          transition:   'opacity .2s',
         }}
       />
     </>

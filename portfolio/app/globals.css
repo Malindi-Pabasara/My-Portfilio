@@ -212,13 +212,8 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 .fdot.d-blue { background: var(--blue); box-shadow: 0 0 12px var(--blue); bottom: 8%; left: 0; }
 @media (min-width: 801px) { .hero-photo { margin-top: 0; } }
 
-/* Cursor glow */
-.cursor-glow {
-  position: absolute; width: 360px; height: 360px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(157,107,255,.24), transparent 70%);
-  pointer-events: none; transform: translate(-50%,-50%); opacity: 0; transition: opacity .3s; z-index: 0;
-}
-.hero:hover .cursor-glow { opacity: 1; }
+
+
 
 /* Sections */
 section { padding: 70px 0; position: relative; }

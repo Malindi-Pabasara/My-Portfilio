@@ -17,22 +17,7 @@ interface HeroProps {
 }
 
 export default function Hero({ name, tagline, bio, available, stats, cvUrl, avatarUrl }: HeroProps) {
-  const glowRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-
-  // Cursor glow
-  useEffect(() => {
-    const hero = heroRef.current;
-    const glow = glowRef.current;
-    if (!hero || !glow) return;
-    const onMove = (e: MouseEvent) => {
-      const r = hero.getBoundingClientRect();
-      glow.style.left = `${e.clientX - r.left}px`;
-      glow.style.top = `${e.clientY - r.top}px`;
-    };
-    if (window.matchMedia('(hover:hover)').matches) hero.addEventListener('mousemove', onMove);
-    return () => hero.removeEventListener('mousemove', onMove);
-  }, []);
 
   // Count-up
   useEffect(() => {
@@ -69,7 +54,6 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
 
   return (
     <header className="hero wrap" id="hero" ref={heroRef}>
-      <div className="cursor-glow" ref={glowRef} />
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Left Column */}
         <div className="flex flex-col items-start text-left">
