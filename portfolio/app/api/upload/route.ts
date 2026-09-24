@@ -65,13 +65,17 @@ export async function POST(req: Request) {
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    
+    // Extract original filename without extension (for image/video) or with extension (for raw)
+    const originalName = file.name || 'upload';
+    const nameWithoutExt = originalName.replace(/\.[^/.]+$/, "");
+    const publicId = resourceType === 'raw' ? originalName : nameWithoutExt;
 
     const url = await uploadToCloudinary(buffer, folder, {
       resource_type: resourceType,
-      // For raw files Cloudinary needs the original filename to serve with the
-      // correct extension (important for PDFs to open correctly in browsers)
+      public_id: publicId,
       use_filename: true,
-      unique_filename: true,
+      unique_filename: false,
     });
 
     return NextResponse.json({ url, resource_type: resourceType }, { status: 200 });
