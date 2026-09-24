@@ -11,6 +11,8 @@ import Education from '@/components/Education';
 import ProjectFeedback from '@/components/ProjectFeedback';
 import Footer from '@/components/Footer';
 
+export const dynamic = 'force-dynamic';
+
 const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
