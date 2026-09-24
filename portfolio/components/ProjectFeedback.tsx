@@ -69,26 +69,26 @@ export default function ProjectFeedback({ projects }: ProjectFeedbackProps) {
   return (
     <section id="feedback" style={{ padding: '80px 0' }}>
       <div className="wrap">
+        <div className="max-w-2xl mx-auto flex flex-col items-center text-center">
         <p className="eyebrow">feedback</p>
         <h2 className="sec-title">Share Your Thoughts</h2>
-        <p style={{ color: 'var(--muted)', marginBottom: 40, maxWidth: 560 }}>
-          Have you explored one of my projects? I'd love to hear your thoughts. Your feedback helps me grow.
+        <p style={{ color: 'var(--muted)', marginBottom: 40 }}>
+          Have you explored one of my projects? I&apos;d love to hear your thoughts. Your feedback helps me grow.
         </p>
 
         {submitted ? (
           // Success state
-          <div style={{
+          <div className="w-full" style={{
             background: 'linear-gradient(135deg, rgba(74,222,128,0.06), rgba(74,222,128,0.02))',
             border: '1px solid rgba(74,222,128,0.25)',
             borderRadius: 16,
             padding: '40px 32px',
-            maxWidth: 480,
             textAlign: 'center',
           }}>
             <div style={{ fontSize: '3rem', marginBottom: 16 }}>✅</div>
             <h3 style={{ margin: '0 0 8px', fontSize: '1.15rem', color: '#4ade80' }}>Thank you!</h3>
             <p style={{ color: 'var(--muted)', fontSize: '.9rem', marginBottom: 24 }}>
-              Your feedback has been submitted. It's been sent securely to the admin.
+              Your feedback has been submitted. It&apos;s been sent securely to the admin.
             </p>
             <button
               className="btn btn-ghost"
@@ -100,7 +100,7 @@ export default function ProjectFeedback({ projects }: ProjectFeedbackProps) {
           </div>
         ) : (
           // Feedback form
-          <form onSubmit={handleSubmit} style={{ maxWidth: 520 }}>
+          <form onSubmit={handleSubmit} className="w-full">
             <div style={{
               background: 'var(--panel-2)',
               border: '1px solid var(--border)',
@@ -223,6 +223,7 @@ export default function ProjectFeedback({ projects }: ProjectFeedbackProps) {
             </div>
           </form>
         )}
+        </div>
       </div>
     </section>
   );
