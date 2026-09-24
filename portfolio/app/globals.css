@@ -124,8 +124,7 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
   box-shadow: 0 4px 16px rgba(157,107,255,.4);
 }
 .navlinks { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; font-size: .92rem; color: var(--muted); }
-.navlinks a { text-decoration: none; transition: color .2s; position: relative; }
-.navlinks a:hover { color: var(--text); }
+.navlinks a { text-decoration: none; position: relative; }
 .navlinks a.active { color: var(--text); }
 .navlinks a.active::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: -22px; height: 2px;

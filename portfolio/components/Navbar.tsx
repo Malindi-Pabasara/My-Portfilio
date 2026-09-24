@@ -50,7 +50,7 @@ export default function Navbar() {
         >
           {['about', 'experience', 'skills', 'projects', 'certifications', 'education'].map((s) => (
             <li key={s}>
-              <a href={`#${s}`} className="hover:text-[#9d6bff] transition-colors duration-300 relative">
+              <a href={`#${s}`} className="transition-colors duration-300 hover:text-purple-400 relative">
                 {s.charAt(0).toUpperCase() + s.slice(1)}
               </a>
             </li>
