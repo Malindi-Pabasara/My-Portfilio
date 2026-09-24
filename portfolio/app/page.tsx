@@ -25,10 +25,21 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchData() {
-      const safeFetch = (url: string, fallback: any) => 
-        fetch(`${url}?t=${Date.now()}`)
-          .then(r => r.ok ? r.json() : fallback)
-          .catch(() => fallback);
+      // Hardened fetch: only parse JSON if the response is actually JSON.
+      // On Vercel, a misconfigured env var or cold-start error returns an HTML
+      // error page (<!DOCTYPE …>), which causes "Unexpected token '<'" if we
+      // blindly call .json() on it.
+      const safeFetch = async (url: string, fallback: any) => {
+        try {
+          const r = await fetch(`${url}?t=${Date.now()}`);
+          if (!r.ok) return fallback;
+          const ct = r.headers.get('content-type') ?? '';
+          if (!ct.includes('application/json')) return fallback;
+          return await r.json();
+        } catch {
+          return fallback;
+        }
+      };
 
       const [profile, experience, skills, projects, certifications, education] = await Promise.all([
         safeFetch('/api/profile', {}),
