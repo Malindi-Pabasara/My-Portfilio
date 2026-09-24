@@ -22,6 +22,12 @@ html {
   scroll-padding-top: 76px;
 }
 
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
 body {
   margin: 0;
   background: var(--bg);
