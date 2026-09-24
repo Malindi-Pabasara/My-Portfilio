@@ -32,9 +32,9 @@ export default function CustomCursor() {
     const onMouseEnter = () => setIsVisible(true);
     const onMouseLeave = () => setIsVisible(false);
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseenter', onMouseEnter);
-    document.addEventListener('mouseleave', onMouseLeave);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseenter', onMouseEnter);
+    window.addEventListener('mouseleave', onMouseLeave);
 
     // Animation loop for trailing ring
     let animationFrameId: number;
@@ -67,13 +67,13 @@ export default function CustomCursor() {
       }
     };
 
-    document.addEventListener('mouseover', handleMouseOver);
+    window.addEventListener('mouseover', handleMouseOver);
 
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseenter', onMouseEnter);
-      document.removeEventListener('mouseleave', onMouseLeave);
-      document.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseenter', onMouseEnter);
+      window.removeEventListener('mouseleave', onMouseLeave);
+      window.removeEventListener('mouseover', handleMouseOver);
       cancelAnimationFrame(animationFrameId);
     };
   }, [isHovering, isVisible]);
@@ -97,7 +97,7 @@ export default function CustomCursor() {
           border: '1px solid #9d6bff',
           borderRadius: '50%',
           pointerEvents: 'none',
-          zIndex: 9999,
+          zIndex: 99999,
           marginLeft: '-16px',
           marginTop: '-16px',
           opacity: isVisible ? (isHovering ? 0.8 : 0.4) : 0,
@@ -117,7 +117,7 @@ export default function CustomCursor() {
           backgroundColor: '#9d6bff',
           borderRadius: '50%',
           pointerEvents: 'none',
-          zIndex: 10000,
+          zIndex: 100000,
           marginLeft: '-4px',
           marginTop: '-4px',
           opacity: isVisible ? 1 : 0,

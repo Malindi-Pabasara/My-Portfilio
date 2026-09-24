@@ -27,8 +27,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <CustomCursor />
         <SessionProvider>
-          <CustomCursor />
           {children}
         </SessionProvider>
       </body>
