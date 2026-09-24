@@ -1,7 +1,6 @@
 import Navbar from '@/components/Navbar';
 import ProgressBar from '@/components/ProgressBar';
 
-export const dynamic = 'force-dynamic';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Experience from '@/components/Experience';
@@ -21,7 +20,9 @@ const BASE = getBaseUrl();
 
 async function fetchJSON<T>(path: string, fallback: T): Promise<T> {
   try {
-    const res = await fetch(`${BASE}${path}`, { cache: 'no-store' });
+    const separator = path.includes('?') ? '&' : '?';
+    const noCacheUrl = `${BASE}${path}${separator}t=${Date.now()}`;
+    const res = await fetch(noCacheUrl, { cache: 'no-store' });
     if (!res.ok) {
       console.error(`Fetch failed for ${path}: ${res.status} ${res.statusText}`);
       return fallback;
