@@ -61,17 +61,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3 shrink-0">
           {isLoggedIn ? (
             <>
-              {/* Feedback — visible to ALL logged-in users */}
-              <Link
-                href="#feedback"
-                id="feedback-nav-btn"
-                className="btn btn-ghost !py-1.5 !px-3 !text-[0.85rem] hidden sm:flex items-center gap-1.5"
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-                Feedback
-              </Link>
+
 
               {/* Admin Panel — EXCLUSIVE to admins */}
               {isAdmin && (
