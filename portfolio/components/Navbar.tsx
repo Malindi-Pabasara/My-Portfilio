@@ -50,7 +50,7 @@ export default function Navbar() {
         >
           {['about', 'experience', 'skills', 'projects', 'certifications', 'education'].map((s) => (
             <li key={s}>
-              <a href={`#${s}`} className="transition-colors duration-300 hover:text-purple-400 relative">
+              <a href={`#${s}`} className="transition-all duration-300 hover:!text-purple-400 relative">
                 {s.charAt(0).toUpperCase() + s.slice(1)}
               </a>
             </li>
@@ -99,7 +99,7 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/login" className="btn btn-ghost !py-1.5 !px-3 !text-[0.85rem] hover:text-[#9d6bff] transition-all duration-300">Login</Link>
+              <Link href="/login" className="btn btn-ghost !py-1.5 !px-3 !text-[0.85rem] hover:!text-purple-400 transition-all duration-300">Login</Link>
               <Link href="/register" className="btn btn-primary !py-1.5 !px-3 !text-[0.85rem] hover:brightness-110 transition-all duration-300">Register</Link>
             </>
           )}
