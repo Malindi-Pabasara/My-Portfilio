@@ -141,11 +141,11 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 @media (max-width: 640px) { .navlinks { display: none; } }
 
 /* HERO */
-.hero { padding: clamp(60px,10vw,96px) 0 clamp(40px,8vw,80px); position: relative; min-height: 100svh; display: flex; align-items: center; justify-content: center; width: 100%; }
+.hero { padding-top: clamp(60px,10vw,96px); padding-bottom: clamp(40px,8vw,80px); position: relative; min-height: 100svh; display: flex; align-items: center; justify-content: center; width: 100%; }
 .hero-grid { display: grid; grid-template-columns: 1.15fr .95fr; gap: 60px; align-items: center; width: 100%; }
 @media (max-width: 800px) {
   .hero-grid { grid-template-columns: 1fr; gap: 44px; }
-  .hero { padding: 56px 0 60px; min-height: auto; }
+  .hero { padding-top: 56px; padding-bottom: 60px; min-height: auto; }
 }
 
 .tag {
