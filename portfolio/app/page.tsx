@@ -53,6 +53,7 @@ export default async function HomePage() {
         available={(p.available as boolean) ?? true}
         stats={(p.stats as Array<{ label: string; value: number; suffix: string }>) || []}
         cvUrl={(p.cvUrl as string) || '#'}
+        avatarUrl={(p.avatarUrl as string) || ''}
       />
 
       <div className="wrap"><div className="divider" /></div>

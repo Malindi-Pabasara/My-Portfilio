@@ -12,9 +12,10 @@ interface HeroProps {
   available: boolean;
   stats: Stat[];
   cvUrl?: string;
+  avatarUrl?: string;
 }
 
-export default function Hero({ name, tagline, bio, available, stats, cvUrl }: HeroProps) {
+export default function Hero({ name, tagline, bio, available, stats, cvUrl, avatarUrl }: HeroProps) {
   const glowRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
 
@@ -90,9 +91,9 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl }: He
           <div className="flex flex-wrap gap-4 mb-10 fade-in d3">
             <a href="#projects" className="btn btn-primary">Explore projects</a>
             {cvUrl && cvUrl !== '#' ? (
-              <a href={cvUrl} download className="btn btn-ghost">Download CV</a>
+              <a href={cvUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">Download CV</a>
             ) : (
-              <a href="#contact" className="btn btn-ghost">Contact me</a>
+              <a href="#contact" className="btn btn-ghost">Download CV</a>
             )}
           </div>
           <div className="flex gap-8 flex-wrap fade-in d4">
@@ -121,13 +122,18 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl }: He
             <div className="absolute inset-[-16px] rounded-full border border-dashed border-purple-500/40 animate-[spin_15s_linear_infinite_reverse] z-0"></div>
 
             {/* Static Inner Avatar */}
-            <div className="relative w-[320px] h-[320px] rounded-full border-4 border-[#242b52] bg-gradient-to-br from-[#1c2444] to-[#0c1020] flex items-center justify-center shadow-[inset_0_0_70px_rgba(157,107,255,0.18)] z-10">
-              <span className="font-['Space_Grotesk'] font-bold text-[6rem] text-[#eef0fb]/30 tracking-tighter">
-                MP
-              </span>
-              <div className="absolute w-3 h-3 rounded-full bg-[#9d6bff] shadow-[0_0_12px_#9d6bff] top-[12%] right-[15%]"></div>
-              <div className="absolute w-3 h-3 rounded-full bg-[#41c7ff] shadow-[0_0_12px_#41c7ff] bottom-[15%] left-[10%]"></div>
+            <div className="relative w-[320px] h-[320px] rounded-full border-4 border-[#242b52] bg-gradient-to-br from-[#1c2444] to-[#0c1020] flex items-center justify-center shadow-[inset_0_0_70px_rgba(157,107,255,0.18)] z-10 overflow-hidden">
+              {avatarUrl ? (
+                <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="font-['Space_Grotesk'] font-bold text-[6rem] text-[#eef0fb]/30 tracking-tighter">
+                  {name ? name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'MP'}
+                </span>
+              )}
+              {/* Note: Moved dots outside the overflow-hidden container to prevent clipping */}
             </div>
+            <div className="absolute w-3 h-3 rounded-full bg-[#9d6bff] shadow-[0_0_12px_#9d6bff] top-[12%] right-[15%] z-20"></div>
+            <div className="absolute w-3 h-3 rounded-full bg-[#41c7ff] shadow-[0_0_12px_#41c7ff] bottom-[15%] left-[10%] z-20"></div>
 
             {/* Background Glow */}
             <div className="absolute inset-[-60px] rounded-full bg-[#9d6bff]/20 blur-[70px] -z-10 pointer-events-none"></div>
