@@ -18,6 +18,7 @@ export interface IProfile extends Document {
   linkedin: string;
   github: string;
   cvUrl: string;
+  avatarUrl: string;
 }
 
 const StatSchema = new Schema<IStat>({
@@ -39,6 +40,7 @@ const ProfileSchema = new Schema<IProfile>(
     linkedin: { type: String, default: '' },
     github: { type: String, default: '' },
     cvUrl: { type: String, default: '' },
+    avatarUrl: { type: String, default: '' },
   },
   { timestamps: true }
 );
