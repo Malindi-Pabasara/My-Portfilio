@@ -151,8 +151,8 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
               style={{ WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }}
             />
 
-            {/* Dashed orbit ring (matches JS radius: half-width + 12px) */}
-            <div className="absolute inset-[-12px] rounded-full border border-dashed border-purple-500/40 z-0" />
+
+
 
             {/* JS-driven orbiting dot — no CSS animation to avoid jump glitch */}
             <div
