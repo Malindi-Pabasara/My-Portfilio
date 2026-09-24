@@ -59,13 +59,13 @@ export default async function HomePage() {
       <Navbar />
 
       <Hero
-        name={(p.name as string) || 'Malindi Pabasara'}
-        tagline={(p.tagline as string) || 'Building full‑stack systems that work.'}
-        bio={(p.bio as string) || 'IT professional and HNDIT candidate specialising in full-stack web and mobile development.'}
-        available={(p.available as boolean) ?? true}
-        stats={(p.stats as Array<{ label: string; value: number; suffix: string }>) || []}
-        cvUrl={(p.cvUrl as string) || '#'}
-        avatarUrl={(p.avatarUrl as string) || (p.profilePicture as string) || ''}
+        name={(p?.name as string) || 'Malindi Pabasara'}
+        tagline={(p?.tagline as string) || 'Building full‑stack systems that work.'}
+        bio={(p?.bio as string) || 'IT professional and HNDIT candidate specialising in full-stack web and mobile development.'}
+        available={(p?.available as boolean) ?? true}
+        stats={(p?.stats as Array<{ label: string; value: number; suffix: string }>) || []}
+        cvUrl={(p?.cvUrl as string) || ''}
+        avatarUrl={(p?.avatarUrl as string) || (p?.profilePicture as string) || ''}
       />
 
       <div className="wrap"><div className="divider" /></div>

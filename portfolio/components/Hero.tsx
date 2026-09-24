@@ -91,10 +91,8 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
           </p>
           <div className="flex flex-wrap gap-4 mb-10 fade-in d3">
             <a href="#projects" className="btn btn-primary">Explore projects</a>
-            {cvUrl && cvUrl !== '#' ? (
+            {cvUrl && cvUrl !== '#' && (
               <a href={cvUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">Download CV</a>
-            ) : (
-              <a href="#contact" className="btn btn-ghost">Download CV</a>
             )}
           </div>
           <div className="flex gap-8 flex-wrap fade-in d4">
