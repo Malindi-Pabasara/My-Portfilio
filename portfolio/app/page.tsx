@@ -56,12 +56,8 @@ export default function HomePage() {
   const feedbackProjects = (data.projects || []).map((proj: any) => ({ _id: proj._id, title: proj.title }));
 
   return (
-    <>
+    <main className="relative w-full min-h-screen bg-gradient-to-br from-fuchsia-600 via-purple-600 to-blue-500">
       <ProgressBar />
-      {/* Glow orbs */}
-      <div className="glow glow-1" />
-      <div className="glow glow-2" />
-      <div className="glow glow-3" />
 
       <Navbar />
 
@@ -97,6 +93,6 @@ export default function HomePage() {
       <ProjectFeedback projects={feedbackProjects} />
 
       <Footer profile={p} />
-    </>
+    </main>
   );
 }
