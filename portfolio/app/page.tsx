@@ -1,5 +1,7 @@
 import Navbar from '@/components/Navbar';
 import ProgressBar from '@/components/ProgressBar';
+
+export const dynamic = 'force-dynamic';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Experience from '@/components/Experience';
