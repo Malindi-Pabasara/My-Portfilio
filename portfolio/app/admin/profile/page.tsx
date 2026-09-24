@@ -193,8 +193,14 @@ export default function AdminProfile() {
   const [cvUploading, setCvUploading] = useState(false);
 
   useEffect(() => {
-    fetch('/api/profile').then(r => r.json()).then((d) => {
-      if (!d || Object.keys(d).length === 0) return; // empty / not yet seeded
+    fetch('/api/profile').then(r => {
+      if (!r.ok) {
+        console.error('API Error');
+        return null;
+      }
+      return r.json();
+    }).then((d) => {
+      if (!d || Object.keys(d).length === 0) return;
       // Only copy known schema fields — never let _id / __v into form state
       setForm({
         name:      d.name       ?? '',

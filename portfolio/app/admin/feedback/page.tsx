@@ -41,11 +41,11 @@ export default function AdminFeedbackPage() {
     try {
       const res = await fetch('/api/feedback');
       if (!res.ok) {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         setError(data.message || 'Failed to load feedback.');
         return;
       }
-      const data = await res.json();
+      const data = await res.json().catch(() => ([]));
       setFeedbacks(data);
     } catch {
       setError('Network error. Please try again.');

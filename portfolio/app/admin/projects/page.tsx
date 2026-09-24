@@ -20,7 +20,7 @@ async function uploadFile(file: File, folder: string): Promise<string> {
   fd.append('folder', folder);
   const res = await fetch('/api/upload', { method: 'POST', body: fd });
   if (!res.ok) {
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     throw new Error(data.message ?? 'Upload failed');
   }
   return (await res.json()).url as string;

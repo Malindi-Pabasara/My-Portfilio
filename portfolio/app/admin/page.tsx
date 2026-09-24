@@ -16,13 +16,14 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
 
   useEffect(() => {
+    const safeFetch = (url: string) => fetch(url).then(r => r.ok ? r.json() : []);
     Promise.all([
-      fetch('/api/projects').then(r => r.json()),
-      fetch('/api/skills').then(r => r.json()),
-      fetch('/api/experience').then(r => r.json()),
-      fetch('/api/certifications').then(r => r.json()),
-      fetch('/api/education').then(r => r.json()),
-      fetch('/api/feedback').then(r => r.json()),
+      safeFetch('/api/projects'),
+      safeFetch('/api/skills'),
+      safeFetch('/api/experience'),
+      safeFetch('/api/certifications'),
+      safeFetch('/api/education'),
+      safeFetch('/api/feedback'),
     ]).then(([projects, skills, experience, certifications, education, feedback]) => {
       setStats({
         projects: Array.isArray(projects) ? projects.length : 0,

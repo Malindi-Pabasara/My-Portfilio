@@ -57,7 +57,7 @@ export default function ProjectFeedback({ projects }: ProjectFeedbackProps) {
       if (res.ok) {
         setSubmitted(true);
       } else {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         setError(data.message || 'Failed to submit feedback.');
       }
     } catch {
