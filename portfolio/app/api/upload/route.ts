@@ -33,6 +33,7 @@ const RAW_MIME_PREFIXES = [
 ];
 
 function resolveResourceType(mimeType: string): 'image' | 'video' | 'raw' | 'auto' {
+  if (mimeType === 'application/pdf') return 'image'; // Force PDF as image for inline viewing
   if (mimeType.startsWith('image/')) return 'image';
   if (mimeType.startsWith('video/')) return 'video';
   if (RAW_MIME_PREFIXES.includes(mimeType)) return 'raw';
