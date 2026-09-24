@@ -7,6 +7,7 @@ import { useSession, signOut } from 'next-auth/react';
 export default function Navbar() {
   const linksRef = useRef<HTMLUListElement>(null);
   const { data: session } = useSession();
+  const isAdmin = (session?.user as any)?.role === 'admin';
 
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll<HTMLElement>('section[id], header[id]'));
@@ -55,10 +56,27 @@ export default function Navbar() {
         <div className="flex items-center gap-3 shrink-0">
           {session ? (
             <>
-              {(session.user as any)?.role === 'admin' && (
-                <Link href="/admin" className="btn btn-ghost !py-1.5 !px-3 !text-[0.85rem]">Admin</Link>
+              {/* Admin Panel — visible only to admins */}
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  id="admin-panel-btn"
+                  className="btn btn-ghost !py-1.5 !px-3 !text-[0.85rem] flex items-center gap-1.5"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                  </svg>
+                  Admin Panel
+                </Link>
               )}
-              <span className="text-[0.9rem] text-[#9099bb] hidden sm:inline-block">Hi, {session.user?.name?.split(' ')[0]}</span>
+              <span className="text-[0.9rem] text-[#9099bb] hidden sm:inline-block">
+                Hi, {session.user?.name?.split(' ')[0]}
+                {isAdmin && (
+                  <span className="ml-1.5 text-[10px] font-bold tracking-wider uppercase bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded px-1.5 py-0.5">
+                    Admin
+                  </span>
+                )}
+              </span>
               <button onClick={() => signOut()} className="btn btn-ghost !py-1.5 !px-3 !text-[0.85rem]">Logout</button>
             </>
           ) : (

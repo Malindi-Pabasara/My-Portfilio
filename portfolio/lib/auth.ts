@@ -5,6 +5,9 @@ import dbConnect from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import User from '@/models/User';
 
+// Emails that are granted the 'admin' role
+const ADMIN_EMAILS = ['malindi.wpm@gmail.com', 'nchathuranga533@gmail.com'];
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -19,7 +22,7 @@ export const authOptions: NextAuthOptions = {
 
         await dbConnect();
 
-        // 1. Admin login via username
+        // 1. Admin login via username (legacy admin model)
         if (credentials.username) {
           const admin = await Admin.findOne({ username: credentials.username });
           if (!admin) return null;
@@ -28,17 +31,18 @@ export const authOptions: NextAuthOptions = {
           return { id: admin._id.toString(), name: admin.username, email: '', role: 'admin' };
         }
 
-        // 2. User login via email
+        // 2. User login via email — open to all registered users
         if (credentials.email) {
-          if (credentials.email !== 'malindi.wpm@gmail.com' && credentials.email !== 'nchathuranga533@gmail.com') {
-            throw new Error('Access denied: Unauthorized email address.');
-          }
-
-          const user = await User.findOne({ email: credentials.email });
+          const user = await User.findOne({ email: credentials.email.toLowerCase() });
           if (!user) return null;
           const isValid = await bcrypt.compare(credentials.password, user.password);
           if (!isValid) return null;
-          return { id: user._id.toString(), name: user.name, email: user.email, role: 'user' };
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            role: user.role, // 'admin' or 'user' stored on the document
+          };
         }
 
         return null;
@@ -60,6 +64,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         (session.user as any).role = token.role;
+        (session.user as any).id = token.id;
       }
       return session;
     },

@@ -13,6 +13,7 @@ const NAV = [
   { href: '/admin/experience', label: 'Experience', icon: '💼' },
   { href: '/admin/certifications', label: 'Certifications', icon: '🏅' },
   { href: '/admin/education', label: 'Education', icon: '🎓' },
+  { href: '/admin/feedback', label: 'Feedback', icon: '💬' },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -21,8 +22,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
 
   useEffect(() => {
-    if (status === 'unauthenticated') router.push('/admin/login');
-  }, [status, router]);
+    if (status === 'loading') return;
+    if (status === 'unauthenticated') {
+      router.push('/admin/login');
+      return;
+    }
+    // Block non-admin users from the admin panel
+    if (session && (session.user as any)?.role !== 'admin') {
+      router.push('/');
+    }
+  }, [status, session, router]);
 
   if (status === 'loading') {
     return (
@@ -32,7 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  if (!session) return null;
+  if (!session || (session.user as any)?.role !== 'admin') return null;
 
   return (
     <div className="admin-layout">
@@ -50,6 +59,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               >
                 <span>{icon}</span>
                 {label}
+                {label === 'Feedback' && (
+                  <span style={{
+                    marginLeft: 'auto',
+                    fontSize: '9px',
+                    fontWeight: 700,
+                    letterSpacing: '.08em',
+                    textTransform: 'uppercase',
+                    background: 'rgba(157,107,255,0.18)',
+                    color: 'var(--purple)',
+                    border: '1px solid rgba(157,107,255,0.3)',
+                    borderRadius: 4,
+                    padding: '1px 5px',
+                  }}>
+                    Private
+                  </span>
+                )}
               </Link>
             </li>
           ))}

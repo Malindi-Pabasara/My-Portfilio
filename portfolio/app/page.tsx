@@ -7,6 +7,7 @@ import Skills from '@/components/Skills';
 import Projects from '@/components/Projects';
 import Certifications from '@/components/Certifications';
 import Education from '@/components/Education';
+import ProjectFeedback from '@/components/ProjectFeedback';
 import Footer from '@/components/Footer';
 
 const BASE = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
@@ -32,6 +33,8 @@ export default async function HomePage() {
   ]);
 
   const p = profile as Record<string, unknown>;
+  // Shape projects for the feedback selector
+  const feedbackProjects = (projects as Array<{ _id: string; title: string }>).map(({ _id, title }) => ({ _id, title }));
 
   return (
     <>
@@ -69,6 +72,9 @@ export default async function HomePage() {
 
       <div className="wrap"><div className="divider" /></div>
       <Education items={education as Parameters<typeof Education>[0]['items']} />
+
+      <div className="wrap"><div className="divider" /></div>
+      <ProjectFeedback projects={feedbackProjects} />
 
       <Footer profile={p as Parameters<typeof Footer>[0]['profile']} />
     </>
