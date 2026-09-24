@@ -12,14 +12,23 @@ import Education from '@/components/Education';
 import ProjectFeedback from '@/components/ProjectFeedback';
 import Footer from '@/components/Footer';
 
-const BASE = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+const getBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_BASE_URL) return process.env.NEXT_PUBLIC_BASE_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return 'http://localhost:3000';
+};
+const BASE = getBaseUrl();
 
 async function fetchJSON<T>(path: string, fallback: T): Promise<T> {
   try {
     const res = await fetch(`${BASE}${path}`, { cache: 'no-store' });
-    if (!res.ok) return fallback;
+    if (!res.ok) {
+      console.error(`Fetch failed for ${path}: ${res.status} ${res.statusText}`);
+      return fallback;
+    }
     return res.json();
-  } catch {
+  } catch (error) {
+    console.error(`Fetch error for ${path}:`, error);
     return fallback;
   }
 }
@@ -55,7 +64,7 @@ export default async function HomePage() {
         available={(p.available as boolean) ?? true}
         stats={(p.stats as Array<{ label: string; value: number; suffix: string }>) || []}
         cvUrl={(p.cvUrl as string) || '#'}
-        avatarUrl={(p.avatarUrl as string) || ''}
+        avatarUrl={(p.avatarUrl as string) || (p.profilePicture as string) || ''}
       />
 
       <div className="wrap"><div className="divider" /></div>
