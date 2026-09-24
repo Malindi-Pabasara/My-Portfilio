@@ -27,8 +27,8 @@ export async function POST(req: Request) {
     const feedback = await Feedback.create({
       projectId,
       projectTitle,
-      userName: session.user.name,
-      userEmail: session.user.email,
+      userName: session.user.name ?? '',
+      userEmail: session.user.email ?? '',
       rating,
       message,
     });
