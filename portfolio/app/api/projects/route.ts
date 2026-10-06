@@ -8,7 +8,7 @@ export async function GET(req: Request) {
   try {
     await dbConnect();
     const { searchParams } = new URL(req.url);
-    const category = searchParams.get('category');
+    const category = searchParams.get('category') as 'fullstack' | 'uiux' | null;
     const query = category ? { category } : {};
     const projects = await Project.find(query).sort({ order: 1 }).lean();
     return NextResponse.json(projects);
