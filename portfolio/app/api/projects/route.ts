@@ -4,10 +4,13 @@ import Project from '@/models/Project';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     await dbConnect();
-    const projects = await Project.find().sort({ order: 1 }).lean();
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get('category');
+    const query = category ? { category } : {};
+    const projects = await Project.find(query).sort({ order: 1 }).lean();
     return NextResponse.json(projects);
   } catch {
     return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });

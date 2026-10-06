@@ -10,9 +10,10 @@ interface Project {
   link: string;
   order: number;
   imageUrl: string;
+  category?: 'fullstack' | 'uiux';
 }
 
-const DEFAULT: Project = { title: '', description: '', tags: [], link: '', order: 0, imageUrl: '' };
+const DEFAULT: Project = { title: '', description: '', tags: [], link: '', order: 0, imageUrl: '', category: 'fullstack' };
 
 async function uploadFile(file: File, folder: string): Promise<string> {
   const fd = new FormData();
@@ -105,15 +106,16 @@ export default function AdminProjects() {
               <th>Order</th>
               <th>Image</th>
               <th>Title</th>
+              <th>Category</th>
               <th>Tags</th>
               <th style={{ textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={5} style={{ textAlign: 'center', padding: 24, color: 'var(--muted)' }}>Loading...</td></tr>
+              <tr><td colSpan={6} style={{ textAlign: 'center', padding: 24, color: 'var(--muted)' }}>Loading...</td></tr>
             ) : items.length === 0 ? (
-              <tr><td colSpan={5} style={{ textAlign: 'center', padding: 24, color: 'var(--muted)' }}>No projects found.</td></tr>
+              <tr><td colSpan={6} style={{ textAlign: 'center', padding: 24, color: 'var(--muted)' }}>No projects found.</td></tr>
             ) : (
               items.map((item) => (
                 <tr key={item._id}>
@@ -125,6 +127,11 @@ export default function AdminProjects() {
                     }
                   </td>
                   <td style={{ fontWeight: 500 }}>{item.title}</td>
+                  <td>
+                    <span className="badge" style={{ background: item.category === 'uiux' ? '#8b5cf620' : '#3b82f620', color: item.category === 'uiux' ? '#a78bfa' : '#60a5fa' }}>
+                      {item.category === 'uiux' ? 'UI/UX' : 'Full-Stack'}
+                    </span>
+                  </td>
                   <td>
                     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                       {item.tags.map(t => <span key={t} className="badge">{t}</span>)}
@@ -175,6 +182,16 @@ export default function AdminProjects() {
 
               <label>Title</label>
               <input required value={editing.title} onChange={e => setEditing({ ...editing, title: e.target.value })} />
+
+              <label>Category</label>
+              <select
+                value={editing.category || 'fullstack'}
+                onChange={e => setEditing({ ...editing, category: e.target.value as 'fullstack' | 'uiux' })}
+                style={{ width: '100%', padding: '8px', marginBottom: '16px', borderRadius: '4px', border: '1px solid var(--border)', background: 'var(--panel)', color: 'inherit' }}
+              >
+                <option value="fullstack">Full-Stack</option>
+                <option value="uiux">UI/UX</option>
+              </select>
 
               <label>Description</label>
               <textarea required value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} />
