@@ -7,7 +7,7 @@ interface ProfileData {
   name: string; title: string; tagline: string; bio: string;
   available: boolean; stats: Stat[];
   email: string; phone: string; linkedin: string; github: string;
-  cvUrl: string; avatarUrl: string;
+  fullstackCvUrl: string; uiuxCvUrl: string; avatarUrl: string;
 }
 
 const DEFAULT: ProfileData = {
@@ -17,7 +17,7 @@ const DEFAULT: ProfileData = {
     { label: 'certifications', value: 3, suffix: '' },
     { label: 'tools & languages', value: 10, suffix: '+' },
   ],
-  email: '', phone: '', linkedin: '', github: '', cvUrl: '', avatarUrl: '',
+  email: '', phone: '', linkedin: '', github: '', fullstackCvUrl: '', uiuxCvUrl: '', avatarUrl: '',
 };
 
 /* ─── helpers ─────────────────────────────────────────────── */
@@ -190,7 +190,8 @@ export default function AdminProfile() {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
-  const [cvUploading, setCvUploading] = useState(false);
+  const [fullstackCvUploading, setFullstackCvUploading] = useState(false);
+  const [uiuxCvUploading, setUiuxCvUploading] = useState(false);
 
   useEffect(() => {
     fetch('/api/profile').then(r => {
@@ -203,18 +204,19 @@ export default function AdminProfile() {
       if (!d || Object.keys(d).length === 0) return;
       // Only copy known schema fields — never let _id / __v into form state
       setForm({
-        name:      d.name       ?? '',
-        title:     d.title      ?? '',
-        tagline:   d.tagline    ?? '',
-        bio:       d.bio        ?? '',
-        available: d.available  ?? true,
-        stats:     Array.isArray(d.stats) ? d.stats : DEFAULT.stats,
-        email:     d.email      ?? '',
-        phone:     d.phone      ?? '',
-        linkedin:  d.linkedin   ?? '',
-        github:    d.github     ?? '',
-        cvUrl:     d.cvUrl      ?? '',
-        avatarUrl: d.avatarUrl  ?? '',
+        name:           d.name           ?? '',
+        title:          d.title          ?? '',
+        tagline:        d.tagline        ?? '',
+        bio:            d.bio            ?? '',
+        available:      d.available      ?? true,
+        stats:          Array.isArray(d.stats) ? d.stats : DEFAULT.stats,
+        email:          d.email          ?? '',
+        phone:          d.phone          ?? '',
+        linkedin:       d.linkedin       ?? '',
+        github:         d.github         ?? '',
+        fullstackCvUrl: d.fullstackCvUrl ?? '',
+        uiuxCvUrl:      d.uiuxCvUrl      ?? '',
+        avatarUrl:      d.avatarUrl      ?? '',
       });
     });
   }, []);
@@ -287,65 +289,123 @@ export default function AdminProfile() {
     }
   };
 
-  /* ── CV handlers ── */
-  const handleCvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* ── Fullstack CV handlers ── */
+  const handleFullstackCvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setCvUploading(true);
+    setFullstackCvUploading(true);
     setMsg(null);
     try {
       const url = await uploadFile(file, 'portfolio/cv');
-      if (form.cvUrl) {
+      if (form.fullstackCvUrl) {
         await fetch('/api/upload', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: form.cvUrl }),
+          body: JSON.stringify({ url: form.fullstackCvUrl }),
         }).catch(() => {});
       }
-      const payload = { ...form, cvUrl: url };
+      const payload = { ...form, fullstackCvUrl: url };
       const res = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error('Failed to update profile database');
-      set('cvUrl', url);
-      setMsg({ text: '✓ CV uploaded and saved!', ok: true });
+      set('fullstackCvUrl', url);
+      setMsg({ text: '✓ Fullstack CV uploaded and saved!', ok: true });
     } catch (err: any) {
-      setMsg({ text: `✗ CV upload failed: ${err.message}`, ok: false });
+      setMsg({ text: `✗ Fullstack CV upload failed: ${err.message}`, ok: false });
     } finally {
-      setCvUploading(false);
+      setFullstackCvUploading(false);
       e.target.value = '';
     }
   };
 
-  const handleCvDelete = async () => {
-    if (!confirm('Are you sure you want to completely delete your CV? This cannot be undone.')) return;
-    setCvUploading(true);
+  const handleFullstackCvDelete = async () => {
+    if (!confirm('Are you sure you want to delete the Fullstack CV? This cannot be undone.')) return;
+    setFullstackCvUploading(true);
     setMsg(null);
     try {
-      if (form.cvUrl) {
+      if (form.fullstackCvUrl) {
         await fetch('/api/upload', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: form.cvUrl }),
+          body: JSON.stringify({ url: form.fullstackCvUrl }),
         });
       }
-      
-      const payload = { ...form, cvUrl: '' };
+      const payload = { ...form, fullstackCvUrl: '' };
       const res = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error('Failed to update profile');
-      
-      set('cvUrl', '');
-      setMsg({ text: '✓ CV deleted completely.', ok: true });
+      set('fullstackCvUrl', '');
+      setMsg({ text: '✓ Fullstack CV deleted completely.', ok: true });
     } catch (err: any) {
-      setMsg({ text: `✗ Failed to delete CV: ${err.message}`, ok: false });
+      setMsg({ text: `✗ Failed to delete Fullstack CV: ${err.message}`, ok: false });
     } finally {
-      setCvUploading(false);
+      setFullstackCvUploading(false);
+    }
+  };
+
+  /* ── UI/UX CV handlers ── */
+  const handleUiuxCvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUiuxCvUploading(true);
+    setMsg(null);
+    try {
+      const url = await uploadFile(file, 'portfolio/cv');
+      if (form.uiuxCvUrl) {
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: form.uiuxCvUrl }),
+        }).catch(() => {});
+      }
+      const payload = { ...form, uiuxCvUrl: url };
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to update profile database');
+      set('uiuxCvUrl', url);
+      setMsg({ text: '✓ UI/UX CV uploaded and saved!', ok: true });
+    } catch (err: any) {
+      setMsg({ text: `✗ UI/UX CV upload failed: ${err.message}`, ok: false });
+    } finally {
+      setUiuxCvUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleUiuxCvDelete = async () => {
+    if (!confirm('Are you sure you want to delete the UI/UX CV? This cannot be undone.')) return;
+    setUiuxCvUploading(true);
+    setMsg(null);
+    try {
+      if (form.uiuxCvUrl) {
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: form.uiuxCvUrl }),
+        });
+      }
+      const payload = { ...form, uiuxCvUrl: '' };
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Failed to update profile');
+      set('uiuxCvUrl', '');
+      setMsg({ text: '✓ UI/UX CV deleted completely.', ok: true });
+    } catch (err: any) {
+      setMsg({ text: `✗ Failed to delete UI/UX CV: ${err.message}`, ok: false });
+    } finally {
+      setUiuxCvUploading(false);
     }
   };
 
@@ -359,18 +419,19 @@ export default function AdminProfile() {
     // This prevents _id / __v / timestamps (which are set by setForm(d) on load)
     // from reaching the API and causing "Mod on _id not allowed" errors.
     const payload: ProfileData = {
-      name:       form.name,
-      title:      form.title,
-      tagline:    form.tagline,
-      bio:        form.bio,
-      available:  form.available,
-      stats:      form.stats.map(s => ({ label: s.label, value: Number(s.value), suffix: s.suffix ?? '' })),
-      email:      form.email,
-      phone:      form.phone,
-      linkedin:   form.linkedin,
-      github:     form.github,
-      cvUrl:      form.cvUrl,
-      avatarUrl:  form.avatarUrl,
+      name:           form.name,
+      title:          form.title,
+      tagline:        form.tagline,
+      bio:            form.bio,
+      available:      form.available,
+      stats:          form.stats.map(s => ({ label: s.label, value: Number(s.value), suffix: s.suffix ?? '' })),
+      email:          form.email,
+      phone:          form.phone,
+      linkedin:       form.linkedin,
+      github:         form.github,
+      fullstackCvUrl: form.fullstackCvUrl,
+      uiuxCvUrl:      form.uiuxCvUrl,
+      avatarUrl:      form.avatarUrl,
     };
 
     const res = await fetch('/api/profile', {
@@ -390,7 +451,7 @@ export default function AdminProfile() {
     }
   };
 
-  const busy = saving || avatarUploading || cvUploading;
+  const busy = saving || avatarUploading || fullstackCvUploading || uiuxCvUploading;
 
   return (
     <div>
@@ -418,14 +479,24 @@ export default function AdminProfile() {
               onDelete={handleAvatarDelete}
             />
             <FileUploadBlock
-              label="CV / Resume"
-              hint="Accepted: PDF — max 10 MB. The download link on your portfolio updates automatically."
+              label="Upload Fullstack CV"
+              hint="Accepted: PDF — max 10 MB. Shown as the 'Download CV' button on the public Fullstack Portfolio page."
               accept=".pdf"
-              uploading={cvUploading}
-              currentUrl={form.cvUrl}
+              uploading={fullstackCvUploading}
+              currentUrl={form.fullstackCvUrl}
               previewType="document"
-              onUpload={handleCvUpload}
-              onDelete={handleCvDelete}
+              onUpload={handleFullstackCvUpload}
+              onDelete={handleFullstackCvDelete}
+            />
+            <FileUploadBlock
+              label="Upload UI/UX CV"
+              hint="Accepted: PDF — max 10 MB. Used on the shared UI/UX Portfolio page."
+              accept=".pdf"
+              uploading={uiuxCvUploading}
+              currentUrl={form.uiuxCvUrl}
+              previewType="document"
+              onUpload={handleUiuxCvUpload}
+              onDelete={handleUiuxCvDelete}
             />
           </div>
         </div>
