@@ -4,6 +4,39 @@ import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import TypewriterEffect from './TypewriterEffect';
 
+/**
+ * Transforms a Cloudinary PDF URL so that:
+ * 1. The fl_attachment flag is injected — the browser PDF viewer's "Save" dialog
+ *    will default to "Malindi_Pabasara_CV.pdf" instead of the random Cloudinary ID.
+ * 2. The URL ends with .pdf so browsers reliably detect the MIME type.
+ *
+ * Non-Cloudinary URLs are returned unchanged (safe fallback).
+ */
+function formatCvUrl(url: string): string {
+  if (!url) return url;
+  try {
+    // Only transform Cloudinary URLs
+    if (!url.includes('res.cloudinary.com')) {
+      return url.endsWith('.pdf') ? url : `${url}.pdf`;
+    }
+    const u = new URL(url);
+    // Pathname looks like: /cloud/image/upload/v123/folder/file
+    // We need to insert a transformation segment after "/upload/"
+    const uploadSegment = '/upload/';
+    const idx = u.pathname.indexOf(uploadSegment);
+    if (idx === -1) return url;
+    const beforeUpload = u.pathname.slice(0, idx + uploadSegment.length);
+    const afterUpload  = u.pathname.slice(idx + uploadSegment.length);
+    // Build the new pathname with fl_attachment injected
+    u.pathname = `${beforeUpload}fl_attachment:Malindi_Pabasara_CV/${afterUpload}`;
+    // Ensure the URL ends with .pdf
+    const final = u.toString();
+    return final.endsWith('.pdf') ? final : `${final}.pdf`;
+  } catch {
+    return url;
+  }
+}
+
 interface Stat { label: string; value: number; suffix: string; }
 
 interface HeroProps {
@@ -115,7 +148,7 @@ export default function Hero({ name, tagline, bio, available, stats, cvUrl, avat
             <a href="#projects" className="btn btn-primary">Explore projects</a>
             {cvUrl && cvUrl !== '#' && (
               <a
-                href={cvUrl}
+                href={formatCvUrl(cvUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-ghost"
