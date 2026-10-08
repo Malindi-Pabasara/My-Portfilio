@@ -21,10 +21,13 @@ const DEFAULT: ProfileData = {
 };
 
 /* ─── helpers ─────────────────────────────────────────────── */
-async function uploadFile(file: File, folder: string): Promise<string> {
+async function uploadFile(file: File, folder: string, resourceType?: 'image' | 'video' | 'raw' | 'auto'): Promise<string> {
   const fd = new FormData();
   fd.append('file', file);
   fd.append('folder', folder);
+  if (resourceType) {
+    fd.append('resourceType', resourceType);
+  }
   const res = await fetch('/api/upload', { method: 'POST', body: fd });
   const data = await res.json();
   if (!res.ok) throw new Error(data.message ?? 'Upload failed');
@@ -296,7 +299,7 @@ export default function AdminProfile() {
     setFullstackCvUploading(true);
     setMsg(null);
     try {
-      const url = await uploadFile(file, 'portfolio/cv');
+      const url = await uploadFile(file, 'portfolio/cv', 'image');
       if (form.fullstackCvUrl) {
         await fetch('/api/upload', {
           method: 'DELETE',
@@ -356,7 +359,7 @@ export default function AdminProfile() {
     setUiuxCvUploading(true);
     setMsg(null);
     try {
-      const url = await uploadFile(file, 'portfolio/cv');
+      const url = await uploadFile(file, 'portfolio/cv', 'image');
       if (form.uiuxCvUrl) {
         await fetch('/api/upload', {
           method: 'DELETE',

@@ -60,8 +60,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'File exceeds the 10 MB limit.' }, { status: 413 });
     }
 
+    const explicitResourceType = formData.get('resourceType') as 'image' | 'video' | 'raw' | 'auto' | null;
     const mimeType = file.type || 'application/octet-stream';
-    const resourceType = resolveResourceType(mimeType);
+    const resourceType = explicitResourceType || resolveResourceType(mimeType);
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
